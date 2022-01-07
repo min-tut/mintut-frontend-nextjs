@@ -1,26 +1,36 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Menu, Dialog } from "@headlessui/react";
+import Router from "next/router";
+import { useEffect, useState } from "react";
+import { Dialog } from "@headlessui/react";
 import SearchComponent from "./HeaderComponents/SearchComponent";
 import MenuComponent from "./HeaderComponents/MenuComponent";
 import ProfileMenu from "./HeaderComponents/ProfileMenu";
-
+import { useCookies } from "react-cookie";
+import { fetchUserProfile } from "utils/api";
+import { useAppSelector, useAppDispatch } from "app/hooks";
+import { login } from "app/reducers/userSlice";
 function Header() {
-  const [toggle, setToggle] = useState(true);
   const [toggleSearch, setToggleSearch] = useState(true);
-  const [toggleSearchBig, setToggleSearchBig] = useState(true);
-
-  useEffect(() => {}, []);
-
+  const user = useAppSelector((state) => state.userReducer);
+  const dispatch = useAppDispatch();
+  const token = useCookies(["auth"])[0].auth;
+  useEffect(() => {
+    if (token) {
+      fetchUserProfile(token)
+        .then(({ data }) => {
+          if (data) {
+            dispatch(login({ ...data, isLogged: true, token: token }));
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          dispatch(login());
+        });
+    }
+  }, [token]);
   function displaySearch() {
     return setToggleSearch(!toggleSearch);
-  }
-  function showMenu() {
-    return setToggle(!toggle);
-  }
-  function showSearchBoxBig() {
-    return setToggleSearchBig(!toggleSearchBig);
   }
   return (
     <>
@@ -37,14 +47,14 @@ function Header() {
             <Link href={"/"}>Mintuts</Link>
           </h1>
         </div>
-        <div className="hidden md:flex  flex-auto items-center font-MerryWeather justify-center">
-          <div className="px-8 py-2 transition-transform hover:animate-pulse ">
+        <div className="hidden md:flex max-w-xs  flex-auto items-center font-MerryWeather justify-around">
+          <div className="px-5 py-2 transition-transform hover:animate-pulse ">
             <Link href={"/"}>Home</Link>
           </div>
-          <div className="px-8 transition-transform hover:animate-pulse py-4 ">
+          <div className="px-5 transition-transform hover:animate-pulse py-4 ">
             <Link href={"/"}>Browse</Link>
           </div>
-          <div className=" px-8 transition-transform hover:animate-pulse py-4 ">
+          <div className=" px-5 transition-transform hover:animate-pulse py-4 ">
             <Link href={"/about"}>About</Link>
           </div>
         </div>
@@ -68,37 +78,46 @@ function Header() {
               />
             </svg>
           </div>
-          <button
-            as="link"
-            href="/upload"
-            className="flex w-24 transition-transform hover:animate-pulse justify-around items-center font-Roboto border m-2  px-2 py-2 rounded-sm"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="red"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                fill="none"
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-              />
-            </svg>
-            <Link href="/upload">Upload</Link>
-          </button>
-        </div>
-        <div className="h-10 hidden md:flex w-20 font-medium items-center font-Roboto justify-center bg-pink-600 rounded-sm text-white transition-transform hover:animate-pulse">
-          <a className="" href="http://localhost:5000/auth/login">
-            Login
-          </a>
-        </div>
-        <ProfileMenu />
 
-        <div className="md:hidden flex px-2 justify-center items-center">
+          {user.isLogged ? (
+            <button
+              onClick={() => Router.push("/upload")}
+              className="flex transition-transform hover:animate-pulse justify-around items-center font-Roboto border m-2  px-2 py-2 rounded-sm"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="red"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  fill="none"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                />
+              </svg>
+              <span className="hidden md:inline w-16">Upload</span>
+            </button>
+          ) : (
+            ""
+          )}
+        </div>
+        {!user.isLogged ? (
+          <div className="h-10 hidden md:flex w-20 font-medium items-center font-Roboto justify-center bg-pink-600 rounded-sm text-white transition-transform hover:animate-pulse">
+            <a className="" href="http://localhost:5000/auth/login">
+              Login
+            </a>
+          </div>
+        ) : (
+          <div className="z-10">
+            <ProfileMenu />
+          </div>
+        )}
+
+        <div className="md:hidden z-10 flex left-0 justify-center items-center">
           <MenuComponent />
         </div>
       </div>

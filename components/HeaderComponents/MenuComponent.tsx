@@ -3,7 +3,7 @@ import { Menu } from "@headlessui/react";
 import Link from "next/link";
 function MenuComponent() {
   return (
-    <div>
+    <div className="flex items-center  flex-col justify-center">
       <Menu>
         <Menu.Button>
           <svg
@@ -23,7 +23,7 @@ function MenuComponent() {
         </Menu.Button>
         <Menu.Items className="">
           <Menu.Item>
-            <div className="shadow-2xl top-20 inset-x-0 shadow-slate-400 absolute w-full bg-white flex flex-col justify-center items-center">
+            <div className="shadow-xl left-0 absolute shadow-slate-200  w-full bg-white flex flex-col justify-center items-center">
               <div className="px-8 py-4 hover:bg-gray-100 w-full  text-center  ">
                 <Link href={"/"}>Home</Link>
               </div>
