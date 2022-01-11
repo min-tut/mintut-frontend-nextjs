@@ -2,3 +2,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .input {
+    @apply px-2 py-1 text-gray-900 font-normal font-Roboto text-base  border border-gray-100 outline-none max-w-3xl;
+  }
+}
