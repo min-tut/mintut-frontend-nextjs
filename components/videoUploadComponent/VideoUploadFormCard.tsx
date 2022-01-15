@@ -93,9 +93,17 @@ function VideoUploadFormCard() {
                 {percentage.displayProgress && (
                   <>
                     <div>
-                      <h1>Uploading</h1>
+                      <h1>{!data ? "Uploading" : ""}</h1>
                     </div>
-                    <div>{percentage.percent}%</div>
+                    <div>
+                      {!data ? (
+                        percentage.percent + "%"
+                      ) : (
+                        <span className="label">
+                          Video uploaded successfully
+                        </span>
+                      )}
+                    </div>
                   </>
                 )}
               </div>
@@ -134,39 +142,40 @@ function VideoUploadFormCard() {
               id="video"
             />
           </div>
-          <div className="flex bg-white w-full py-2 px-4 items-end justify-end">
-            <button
-              className="px-4 rounded-sm py-2 font-Roboto font-medium hover:bg-pink-600 outline-hidden bg-pink-700  text-white"
-              type="submit"
-            >
-              Upload
-            </button>
+          <div className="flex bg-white w-full py-2 px-4 items-center justify-center">
+            {!data ? (
+              <button
+                className="px-4 rounded-sm py-2 font-Roboto font-medium hover:bg-pink-600 outline-hidden bg-pink-700  text-white"
+                type="submit"
+              >
+                Upload
+              </button>
+            ) : (
+              <div className="flex w-full justify-around items-center">
+                <button className="px-4 outline outline-1 text-purple-600 text-base font-Roboto py-2">
+                  Save as Draft
+                </button>
+                <Link passHref href={`upload/${data}`}>
+                  <button className="px-4 outline outline-1 hover:bg-pink-700 hover:outline-pink-700 outline-pink-500 bg-pink-500 text-white  text-base font-Roboto py-2">
+                    Next
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
         </form>
       </div>
-
-      <div>{!data ? "" : <Link href={`upload/${data}`}>Next</Link>}</div>
-      <div>
-        {error.code ? (
-          <>
-            <div className="text-red-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>{" "}
-              {error.message}
-            </div>
-          </>
-        ) : (
+      <div className="text-center opacity-50  font-Open-Sans">
+        {!data ? (
           ""
+        ) : (
+          <>
+            <p>
+              <strong>Note:</strong> Either save the video to draft for later
+              edit or click next to submit video details
+            </p>
+            <p>Draft videos are deleted after 7 days of upload</p>
+          </>
         )}
       </div>
     </>

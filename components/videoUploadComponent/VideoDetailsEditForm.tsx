@@ -35,7 +35,7 @@ function VideoDetailsEditForm() {
               minLength: 20,
               maxLength: 100,
               required: true,
-              pattern: /[\w\d\@\.\!\*+?]{3}/,
+              pattern: /^[A-Za-z0-9'\.,&@:;?!()$#' ']+$/,
             })}
             id="videoTitle"
           />
@@ -54,7 +54,7 @@ function VideoDetailsEditForm() {
             {...register("videoDescription", {
               maxLength: 5000,
               required: false,
-              pattern: /[\w\d\@\.\!\*+?]{3}/,
+              pattern: /^[A-Za-z0-9'\.,&@:;?!()$#' ']+$/,
             })}
             id="videoDescription"
           />
@@ -68,7 +68,9 @@ function VideoDetailsEditForm() {
             cols={20}
             rows={3}
             className="input resize-none"
-            {...register("videoTags")}
+            {...register("videoTags", {
+              pattern: /^[A-Za-z0-9'\.,&@:;?!()$#' ']+$/,
+            })}
             id="videoTags"
           />
 
