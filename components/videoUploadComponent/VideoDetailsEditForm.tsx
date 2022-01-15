@@ -1,65 +1,100 @@
+import { useForm, SubmitHandler } from "react-hook-form";
+
+type Inputs = {
+  videoTitle: string;
+  videoDescription: string;
+  videoTags: string;
+  videoStatus: string;
+};
 function VideoDetailsEditForm() {
-  function submitForm(e) {
-    e.preventDefault();
-  }
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<Inputs>();
+
+  const submitForm: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+  };
   return (
-    <div>
-      <form className="p-4 flex flex-col" onSubmit={submitForm}>
-        <label className="font-Roboto font-medium" htmlFor="video_title">
-          Title
-        </label>
-        <input
-          className="input"
-          required
-          placeholder="Enter video title"
-          type="text"
-          name="video_title"
-          id="video_title"
-          autoComplete="off"
-        />
-        <label className="font-Roboto font-medium" htmlFor="video_description">
-          Description
-        </label>
-        <textarea
-          className="input resize-none scroll-smooth overscroll-y-contain"
-          cols={30}
-          rows={15}
-          placeholder="Enter description"
-          id="video_description"
-          name="video_description"
-          autoComplete="off"
-        />
-        <label className="font-Roboto font-medium" htmlFor="video_tags">
-          Tags
-        </label>
-        <input
-          placeholder="Enter tags"
-          className="input"
-          type="text"
-          name="video_tags"
-          id="video_tags"
-        />
-        <label className="font-Roboto font-medium" htmlFor="status">
-          Status
-        </label>
-        <select
-          className="border max-w-3xl font-Roboto font-light py-1 px-2 text-base border-gray-100 outline-none"
-          name="status"
-          id="status"
-        >
-          <option value="true">Public</option>
-          <option value="false">Private</option>
-        </select>
-        <div className="flex items-center justify-between py-4">
-          <button className=" font-Roboto px-4 underline py-2 w-max outline-none text-purple-600 hover:text-purple-800">
-            cancel
-          </button>
-          <button
-            className="bg-pink-500 font-Roboto text-white w-max px-4 py-2 rounded hover:bg-pink-600"
-            type="submit"
+    <div className="flex rounded-md m-auto w-full h-full items-center justify-center">
+      <form
+        className="flex items-center justify-center p-8 w-full m-auto h-full flex-col"
+        onSubmit={handleSubmit(submitForm)}
+      >
+        <div className="flex flex-col max-w-3xl m-auto w-full">
+          <label className="label" htmlFor="videoTitle">
+            Title
+          </label>
+          <input
+            autoComplete="off"
+            className="input"
+            placeholder="Enter title"
+            {...register("videoTitle", {
+              minLength: 20,
+              maxLength: 100,
+              required: true,
+              pattern: /[\w\d\@\.\!\*+?]{3}/,
+            })}
+            id="videoTitle"
+          />
+          {errors.videoTitle && (
+            <span className="text-red-500">This field is required</span>
+          )}
+
+          <label className="label" htmlFor="videoDescription">
+            Description
+          </label>
+          <textarea
+            className="input resize-none overflow-auto"
+            cols={20}
+            placeholder="Enter description"
+            rows={10}
+            {...register("videoDescription", {
+              maxLength: 5000,
+              required: false,
+              pattern: /[\w\d\@\.\!\*+?]{3}/,
+            })}
+            id="videoDescription"
+          />
+
+          <label className="label" htmlFor="videoTags">
+            Tags
+          </label>
+          <textarea
+            placeholder="Enter tags"
+            maxLength={400}
+            cols={20}
+            rows={3}
+            className="input resize-none"
+            {...register("videoTags")}
+            id="videoTags"
+          />
+
+          <label className="label" htmlFor="videoStatus">
+            Status
+          </label>
+          <select
+            className="input"
+            {...register("videoStatus")}
+            id="videoStatus"
           >
-            Submit
-          </button>
+            <option value="PUBLIC">Public</option>
+            <option value="PRIVATE">Private</option>
+          </select>
+
+          <div className="flex pt-4 max-w-2xl m-auto w-full items-center justify-between">
+            <button className="px-3 outline  outline-1 text-purple-600 text-base font-Roboto py-2">
+              cancel
+            </button>
+            <button
+              className="bg-pink-500 text-base font-Roboto py-2 px-4 hover:bg-pink-600 text-white rounded-sm"
+              type="submit"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </form>
     </div>

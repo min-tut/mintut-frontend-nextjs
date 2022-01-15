@@ -95,7 +95,7 @@ function VideoUploadFormCard() {
                     <div>
                       <h1>Uploading</h1>
                     </div>
-                    <div>{percentage.percent}</div>
+                    <div>{percentage.percent}%</div>
                   </>
                 )}
               </div>

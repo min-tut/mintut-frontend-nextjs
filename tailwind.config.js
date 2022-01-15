@@ -8,6 +8,7 @@ module.exports = {
       'montserrat': ['Montserrat', 'sans-serif'],
       "Roboto": ['Roboto', 'sans-serif'],
       "MerryWeather": ['Merriweather Sans', 'sans-serif'],
+      'Open-Sans': ['Open Sans', 'sans-serif'],
     },
     extend: {
 

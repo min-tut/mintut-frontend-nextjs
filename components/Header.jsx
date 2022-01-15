@@ -37,13 +37,13 @@ function Header() {
       <div className="border-b flex px-4 h-20 items-center">
         <div className="flex-auto flex px-5 items-center">
           <Image
-            className="transition-transform animate-pulse ease-linear hover:animate-spin"
+            className="transition-transform ease-linear hover:animate-spin"
             src={"/mintut-logo.svg"}
             width="40px"
             height="40px"
             alt="mintuts"
           />
-          <h1 className="font-montserrat font-medium  mx-2  text-3xl">
+          <h1 className="font-montserrat font-semibold  mx-2  text-3xl">
             <Link href={"/"}>Mintuts</Link>
           </h1>
         </div>
